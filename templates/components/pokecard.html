@@ -1,0 +1,22 @@
+{% for pokemon in pokemons %}
+<div class="col-md-2">
+    <div class="content__cards" onclick="window.location.href='/detalhes/{{pokemon.id}}'" data-type="{{pokemon.types[0]}}">
+        <div id="card__header" class="" data-type="{{ pokemon.types[0] }}">
+            <div class="card__bar">
+                <p class="m-0">{{pokemon.name}}</p>
+                <span> #{{pokemon.id}}</span>
+            </div>
+            <div class="pokemon__image">
+                <img src="{{ pokemon.image }}" alt="{{ pokemon.name }}">
+            </div>
+        </div>
+        <div class="pokemon__data">
+            <div class="pokemon__types">
+                {% for type in pokemon.types %}
+                <span class="type" data-type="{{type}}">{{ type }}</span>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endfor %}

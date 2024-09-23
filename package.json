@@ -1,0 +1,23 @@
+{
+    "name": "PokedexFlask",
+    "version": "1.0.0",
+    "description": "Pokedex with Flask",
+    "author": "Igor Henrique",
+    "main": "gulpfile.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "dev": "gulp"
+    },
+    "dependencies": {
+        "bootstrap": "^5.3.3",
+        "gulp": "^5.0.0",
+        "gulp-concat": "^2.6.1",
+        "gulp-sass": "^5.1.0",
+        "gulp-uglify": "^3.0.2",
+        "sass": "^1.77.6",
+        "browser-sync": "3.0.2"
+    },
+    "devDependencies": {
+        "concurrently": "^9.0.1"
+    }
+}

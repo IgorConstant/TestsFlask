@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Pokedex Flask">
+    <meta name="keywords" content="Pokedex, Flask, Python">
+    <meta name="author" content="Igor Henrique Constant">
+    <title>Pokedex Flask</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Rubik:ital,wght@0,300..900;1,300..900&display=swap"
+        rel="stylesheet">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+</head>
+
+<body>
+    {% include 'layouts/header.html' %}
+
+    <main>
+        <section id="list__pokemons">
+            <div class="container-fluid">
+                <div class="row">
+                    {% include 'components/pokecard.html' %}
+                </div>
+            </div>
+        </section>
+    </main>
+
+    {% include 'layouts/footer.html' %}
+
+    <!-- JS -->
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+
+</html>

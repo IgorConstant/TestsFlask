@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Pokedex Flask">
+    <meta name="keywords" content="Pokedex, Flask, Python">
+    <meta name="author" content="Igor Henrique Constant">
+    <title>Detalhes - {{pokemon_name}}</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Rubik:ital,wght@0,300..900;1,300..900&display=swap"
+        rel="stylesheet">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+</head>
+
+<body>
+    {% include 'layouts/header.html' %}
+
+    <main>
+        <section id="pokemon__details">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="content__cards" data-type="{{pokemon_types[0]}}">
+                            <div id="card__header" class="" data-type="{{ pokemon_types[0] }}">
+                                <div class="card__bar">
+                                    <p class="m-0">{{pokemon_name}}</p>
+                                    <span> #{{pokemon_id}}</span>
+                                </div>
+                                <div class="pokemon__image">
+                                    <img src="{{ pokemon_image }}" alt="{{ pokemon_name }}">
+                                </div>
+                            </div>
+                            <div class="pokemon__data">
+                                <div class="pokemon__types">
+                                    {% for type in pokemon_types %}
+                                    <span class="type" data-type="{{type}}">{{ type }}</span>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="content__cards p-2" data-type="{{pokemon_types[0]}}">
+                            <div>
+                                {% include 'components/pokestats.html' %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    {% include 'layouts/footer.html' %}
+
+    <!-- JS -->
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+
+</html>

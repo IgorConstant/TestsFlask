@@ -1,0 +1,8 @@
+@charset "UTF-8";
+
+// Import the Bootstrap SCSS
+@import "../node_modules/bootstrap/scss/bootstrap";
+
+// Import the custom styles
+@import "base";
+@import "cards";
