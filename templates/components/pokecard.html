@@ -1,5 +1,5 @@
 {% for pokemon in pokemons %}
-<div class="col-md-2">
+<div class="col-sm-6 col-md-2">
     <div class="content__cards" onclick="window.location.href='/detalhes/{{pokemon.id}}'" data-type="{{pokemon.types[0]}}">
         <div id="card__header" class="" data-type="{{ pokemon.types[0] }}">
             <div class="card__bar">
