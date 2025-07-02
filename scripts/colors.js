@@ -29,7 +29,7 @@ function applyTypeColors() {
         }
     });
 
-    const cardHeaders = document.querySelectorAll('#card__header');
+    const cardHeaders = document.querySelectorAll('.card__header');
     cardHeaders.forEach(element => {
         const type = element.getAttribute('data-type');
         const color = typeColors[type];

@@ -1,24 +1,71 @@
 header {
     .navbar {
         .content__header {
-            img{
+            img {
                 margin-top: -6px;
             }
 
-            p {
+            a {
                 font-family: "Press Start 2P", system-ui;
                 font-weight: 400;
                 font-style: normal;
+                text-decoration: none;
+                color: #222;
             }
         }
     }
 }
 
-body, html{
+.btn-primary{
+    background: #ec0000;
+    color: #fff;
+    border: 1px solid #bd0000;
+
+    &:hover {
+        background: #bd0000;
+        color: #fff;
+    }
+}
+
+body,
+html {
     font-family: "Rubik", sans-serif;
 }
 
-.form-control{
+.form-control {
     font-family: "Press Start 2P", system-ui;
     font-size: 12px;
+}
+
+.spinner {
+    animation: rotate 1s linear infinite;
+}
+
+.spinner .path {
+    stroke: #007bff;
+    stroke-linecap: round;
+    animation: dash 1.5s ease-in-out infinite;
+}
+
+@keyframes rotate {
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes dash {
+    0% {
+        stroke-dasharray: 1, 150;
+        stroke-dashoffset: 0;
+    }
+
+    50% {
+        stroke-dasharray: 90, 150;
+        stroke-dashoffset: -35;
+    }
+
+    100% {
+        stroke-dasharray: 90, 150;
+        stroke-dashoffset: -124;
+    }
 }

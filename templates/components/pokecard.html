@@ -1,22 +1,68 @@
-{% for pokemon in pokemons %}
-<div class="col-sm-6 col-md-2">
-    <div class="content__cards" onclick="window.location.href='/detalhes/{{pokemon.id}}'" data-type="{{pokemon.types[0]}}">
-        <div id="card__header" class="" data-type="{{ pokemon.types[0] }}">
-            <div class="card__bar">
-                <p class="m-0">{{pokemon.name}}</p>
-                <span> #{{pokemon.id}}</span>
+<div class="row g-3" id="pokemon-list">
+    {% for pokemon in pokemons %}
+    <div class="col-sm-6 col-md-2">
+        <div class="content__cards" onclick="window.location.href='/detalhes/{{pokemon.id}}'"
+            data-type="{{pokemon.types[0]}}">
+            <div class="card__header" data-type="{{ pokemon.types[0] }}">
+                <div class="card__bar">
+                    <p class="m-0">{{pokemon.name}}</p>
+                    <span> #{{pokemon.id}}</span>
+                </div>
+                <div class="pokemon__image">
+                    <img src="{{ pokemon.image }}" alt="{{ pokemon.name }}">
+                </div>
             </div>
-            <div class="pokemon__image">
-                <img src="{{ pokemon.image }}" alt="{{ pokemon.name }}">
-            </div>
-        </div>
-        <div class="pokemon__data">
-            <div class="pokemon__types">
-                {% for type in pokemon.types %}
-                <span class="type" data-type="{{type}}">{{ type }}</span>
-                {% endfor %}
+            <div class="pokemon__data">
+                <div class="pokemon__types">
+                    {% for type in pokemon.types %}
+                    <span class="type" data-type="{{type}}">{{ type }}</span>
+                    {% endfor %}
+                </div>
             </div>
         </div>
     </div>
+    {% endfor %}
 </div>
-{% endfor %}
+
+
+<div class="text-center my-4">
+    <button id="load-more-btn" class="btn btn-primary">
+        Ver mais Pokémons
+    </button>
+</div>
+
+
+<script>
+
+    const loadMoreBtn = document.getElementById('load-more-btn');
+    const pokemonList = document.getElementById('pokemon-list');
+    let nextPage = 2;
+    const searchTerm = "{{ search | default('') }}";
+
+    loadMoreBtn.addEventListener('click', () => {
+        loadMoreBtn.style.display = 'none';
+
+        fetch(`/load_more?page=${nextPage}&search=${encodeURIComponent(searchTerm)}`, {
+            headers: { 'X-Requested-With': 'XMLHttpRequest' }
+        })
+            .then(res => res.json())
+            .then(data => {
+                if (data.error) throw new Error(data.error);
+                pokemonList.insertAdjacentHTML('beforeend', data.html);
+                applyTypeColors();
+
+                if (data.has_more) {
+                    nextPage = data.next_page;
+                    loadMoreBtn.style.display = 'inline-block';
+                } else {
+                    loadMoreBtn.style.display = 'none';
+                }
+            })
+            .catch(err => {
+                console.error("Erro:", err);
+                alert("Erro ao carregar mais pokémons.");
+                loadMoreBtn.style.display = 'inline-block';
+            });
+    });
+
+</script>

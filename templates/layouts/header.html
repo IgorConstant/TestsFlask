@@ -1,30 +1,27 @@
 <header>
   <nav class="navbar py-3 bg-body-tertiary">
     <div class="container-fluid d-flex justify-content-between align-items-center">
-      
+
       <!-- Logo à esquerda -->
       <div class="d-flex align-items-center content__header">
-        <img src="{{ url_for('static', filename='images/logo.jpg') }}" alt="Logo" width="40" height="40" class="me-2">
-        <p class="m-0">Pokedéx Flask</p>
+        <a href="\">
+          <img src="{{ url_for('static', filename='images/logo.jpg') }}" alt="Logo" width="40" height="40" class="me-2">
+          Pokédex Flask
+        </a>
       </div>
-      
+
       <!-- Input de busca à direita -->
       <form action="{{ url_for('main.index') }}" method="GET" class="d-flex" role="search">
         <div class="input-group">
-          <input
-            type="search"
-            class="form-control"
-            placeholder="Buscar Pokémon"
-            name="search"
-            aria-label="Buscar Pokémon"
-          >
+          <input type="search" class="form-control" placeholder="Buscar Pokémon" name="search"
+            aria-label="Buscar Pokémon">
           <button class="btn btn-outline-secondary" type="submit" id="button-search">
             <i class="bi bi-search"></i>
             <span class="visually-hidden">Buscar</span>
           </button>
         </div>
       </form>
-      
+
     </div>
   </nav>
 </header>
