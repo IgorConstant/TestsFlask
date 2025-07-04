@@ -20,6 +20,9 @@ def details(pokemon_id):
         base_experience = pokemon_data["base_experience"]
         pokemon_stats = [{"base_stat": stat["base_stat"], "name": stat["stat"]["name"]} for stat in pokemon_data["stats"]]
 
+        # Som (choro)
+        cries_url = pokemon_data.get("cries", {}).get("latest", None)
+
         # --- Taxa de captura ---
         species_url = f"https://pokeapi.co/api/v2/pokemon-species/{pokemon_name}"
         species_response = requests.get(species_url)
@@ -35,22 +38,56 @@ def details(pokemon_id):
                 description = entry["flavor_text"].replace("\n", " ").replace("\f", " ")
                 break
 
+        # --- Linha evolutiva (com nível ou método de evolução) ---
+        evolution_chain_url = species_data["evolution_chain"]["url"]
+        evolution_response = requests.get(evolution_chain_url)
+        evolution_response.raise_for_status()
+        evolution_data = evolution_response.json()
+
+        def extract_evolutions(chain):
+            evo_chain = []
+            current = chain
+            while current:
+                species_name = current["species"]["name"]
+                evo_detail = current.get("evolution_details", [])
+                trigger = evo_detail[0]["trigger"]["name"] if evo_detail else None
+                min_level = evo_detail[0].get("min_level") if evo_detail else None
+
+                evo_chain.append({
+                    "name": species_name,
+                    "trigger": trigger,
+                    "min_level": min_level
+                })
+
+                evolves_to = current["evolves_to"]
+                current = evolves_to[0] if evolves_to else None
+            return evo_chain
+
+        evo_steps = extract_evolutions(evolution_data["chain"])
+
+        evolution_chain = []
+        for evo in evo_steps:
+            evo_data = requests.get(f"https://pokeapi.co/api/v2/pokemon/{evo['name']}").json()
+            evolution_chain.append({
+                "name": evo["name"],
+                "sprite": evo_data["sprites"]["front_default"],
+                "trigger": evo["trigger"],
+                "min_level": evo["min_level"]
+            })
+
         # --- Localizações (encontros selvagens) ---
         encounters_url = pokemon_data["location_area_encounters"]
         encounters_response = requests.get(encounters_url)
         encounters_response.raise_for_status()
         encounters_data = encounters_response.json()
 
-        # Traduções conhecidas de locais
         location_translations = {
             "kanto-route-1": "Rota 1 de Kanto",
             "tin-tower": "Torre de Latão",
             "seafoam-islands": "Ilhas Espuma do Mar",
             "johto-ice-path": "Caminho de Gelo (Johto)",
-            # Adicione mais conforme necessário
         }
 
-        # Função para detectar o tipo de ambiente
         def infer_environment_icon(location_name):
             name = location_name.lower()
             if "cave" in name or "mt" in name or "rock" in name or "tunnel" in name:
@@ -68,9 +105,7 @@ def details(pokemon_id):
             else:
                 return "❓ Outro"
 
-        # Monta a lista completa de locais de encontro
         encounter_locations = []
-
         if encounters_data:
             for encounter in encounters_data:
                 raw_name = encounter["location_area"]["name"]
@@ -90,6 +125,7 @@ def details(pokemon_id):
         return render_template(
             "details.html",
             pokemon_id=pokemon_id,
+            pokemon_data=pokemon_data,
             pokemon_name=pokemon_name,
             pokemon_types=pokemon_types,
             pokemon_image=pokemon_image,
@@ -99,7 +135,9 @@ def details(pokemon_id):
             capture_rate=capture_rate,
             capture_percentage=capture_percentage,
             encounter_locations=encounter_locations,
-            description=description
+            description=description,
+            cries_url=cries_url,
+            evolution_chain=evolution_chain
         )
 
     except requests.exceptions.RequestException as e:

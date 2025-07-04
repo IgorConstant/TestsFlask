@@ -13,8 +13,30 @@
                             <p class="m-0">{{pokemon_name}}</p>
                             <span> #{{pokemon_id}}</span>
                         </div>
-                        <div class="pokemon__image">
-                            <img src="{{ pokemon_image }}" alt="{{ pokemon_name }}">
+                        <div id="carouselSprites" class="carousel slide" data-bs-ride="carousel">
+                            <div class="carousel-inner">
+                                {% set sprites = [
+                                pokemon_image,
+                                pokemon_data['sprites']['back_default'],
+                                pokemon_data['sprites']['front_shiny'],
+                                pokemon_data['sprites']['back_shiny']
+                                ] %}
+                                {% for sprite in sprites %}
+                                {% if sprite %}
+                                <div class="carousel-item {% if loop.first %}active{% endif %}">
+                                    <img src="{{ sprite }}" class="d-block mx-auto" alt="{{ pokemon_name }}">
+                                </div>
+                                {% endif %}
+                                {% endfor %}
+                            </div>
+                            <button class="carousel-control-prev" type="button" data-bs-target="#carouselSprites"
+                                data-bs-slide="prev">
+                                <span class="carousel-control-prev-icon"></span>
+                            </button>
+                            <button class="carousel-control-next" type="button" data-bs-target="#carouselSprites"
+                                data-bs-slide="next">
+                                <span class="carousel-control-next-icon"></span>
+                            </button>
                         </div>
                     </div>
                     <div class="pokemon__data">
@@ -31,13 +53,26 @@
                     <div class="pokemon__data p-2">
                         <div
                             style="background: #eee; border-radius: 5px; overflow: hidden; width: 100%; max-width: 100%;">
-                            <div
-                                style="background: #4CAF50; width: {{ capture_percentage }}%; padding: 5px 0; color: white;">
-                                <p class="m-0 text-center capture-rate">{{ capture_rate }} / 255 ({{ capture_percentage
-                                    }}%)</p>
+                            <div style="
+                                background: #4CAF50;
+                                width: {{ capture_percentage }}%;
+                                min-width: 4%;
+                                padding: 5px 0;
+                                color: white;
+                                text-align: center;
+                                font-size: 0.9rem;
+                            ">
+                                {% if capture_percentage >= 10 %}
+                                {{ capture_rate }} / 255 ({{ capture_percentage }}%)
+                                {% endif %}
                             </div>
                         </div>
+                        {% if capture_percentage < 10 %} <p class="m-0 text-center capture-rate text-dark mt-1">
+                            {{ capture_rate }} / 255 ({{ capture_percentage }}%)
+                            </p>
+                            {% endif %}
                     </div>
+
                 </div>
                 <div class="content__cards p-2" data-type="{{pokemon_types[0]}}">
                     <div class="card__header" data-type="{{ pokemon_types[0] }}">
@@ -52,7 +87,7 @@
                             {% endfor %}
                         </ul>
                         {% else %}
-                        <p>Não encontrado em áreas selvagens.</p>
+                        <p class="not-found">Não encontrado em áreas selvagens.</p>
                         {% endif %}
                     </div>
                 </div>
@@ -62,14 +97,45 @@
                     <p class="pokedex-description">descrição pokedéx</p>
                     <p style="font-style: italic;font-size:12px;font-weight:700">{{ description }}</p>
                 </div>
+
+                {% if cries_url %}
+                <div class="content__cards p-2" data-type="{{pokemon_types[0]}}">
+                    <p class="taxa-captura">som (cry)</p>
+                    <audio controls>
+                        <source src="{{ cries_url }}" type="audio/ogg">
+                        Seu navegador não suporta áudio.
+                    </audio>
+                </div>
+                {% endif %}
+
+
                 <div class="content__cards p-2" data-type="{{pokemon_types[0]}}">
                     <div>
                         {% include 'components/pokestats.html' %}
                     </div>
                 </div>
-            </div>
 
-            <div class="col-md-12">
+
+                {% if evolution_chain %}
+                <div class="content__cards p-2 mt-3" data-type="{{pokemon_types[0]}}">
+                    <p class="taxa-captura">linha evolutiva</p>
+                    <div class="d-flex flex-wrap align-items-center justify-content-center gap-3">
+                        {% for evo in evolution_chain %}
+                        <div class="text-center">
+                            <img src="{{ evo.sprite }}" alt="{{ evo.name }}" width="96">
+                            <p class="m-0 text-capitalize name-pokemon">{{ evo.name }}</p>
+                            {% if evo.min_level %}
+                            <small>Lv. {{ evo.min_level }}</small>
+                            {% elif evo.trigger == 'trade' %}
+                            <small>Troca</small>
+                            {% elif evo.trigger %}
+                            <small>{{ evo.trigger|replace("-", " ")|capitalize }}</small>
+                            {% endif %}
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endif %}
 
             </div>
         </div>

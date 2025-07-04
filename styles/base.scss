@@ -16,6 +16,16 @@ header {
     }
 }
 
+footer {
+    background: #f8f9fa;
+    padding: 1rem 0;
+
+    p{
+        font-size: 12px;
+    }
+
+}
+
 .btn-primary{
     background: #ec0000;
     color: #fff;
@@ -68,4 +78,14 @@ html {
         stroke-dasharray: 90, 150;
         stroke-dashoffset: -124;
     }
+}
+
+.not-found{
+    font-size: 14px;
+}
+
+.name-pokemon{
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: capitalize;
 }
